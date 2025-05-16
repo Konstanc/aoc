@@ -1,0 +1,47 @@
+const fs = require('fs');
+let fileName = 'input.txt';
+// let fileName = 'example.txt';
+fs.readFile(fileName, 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    solve(data);
+});
+function prepare(input) {
+    let moves = input
+        .split('\n')
+        .map(line => {
+        let l = line.split(' ');
+        return { dir: l[0], l: parseInt(l[1]) };
+    });
+    return moves;
+}
+function calcMove(moves) {
+    let d = 0;
+    let pos = 0;
+    let aim = 0;
+    for (let i = 0; i < moves.length; i++) {
+        let m = moves[i];
+        switch (m.dir) {
+            case 'forward':
+                pos += m.l;
+                d += aim * m.l;
+                break;
+            case 'down':
+                aim += m.l;
+                break;
+            case 'up':
+                aim -= m.l;
+                break;
+            default:
+                break;
+        }
+    }
+    return d * pos;
+}
+function solve(input) {
+    let moves = prepare(input);
+    let res = calcMove(moves);
+    console.log(res);
+}
+//# sourceMappingURL=solution2.js.map

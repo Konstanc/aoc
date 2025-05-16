@@ -1,0 +1,58 @@
+declare var require: any
+const fs = require('fs')
+let fileName = 'input.txt';
+// let fileName = 'example.txt';
+fs.readFile(fileName, 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    solve(data);
+});
+
+function prepare(input: string) {
+    let res = input
+        .split('\n')
+        .map(line => line.split(' '));
+    return res;
+}
+
+function calcRounds(rounds: string[][]) {
+    let res = 0;
+    rounds.forEach(round => {
+        switch (round[1]) {
+            case 'X':   // Rock
+                res += 1;
+                switch (round[0]) {
+                    case 'A': res += 3; break;  // Rock
+                    case 'B': res += 0; break;  // Paper
+                    case 'C': res += 6; break;  // Scissors
+                }
+                break;
+                case 'Y':   // Paper
+                res += 2;
+                switch (round[0]) {
+                    case 'A': res += 6; break;  // Rock
+                    case 'B': res += 3; break;  // Paper
+                    case 'C': res += 0; break;  // Scissors
+                }
+                break;
+                case 'Z':   // Scissors
+                res += 3;
+                switch (round[0]) {
+                    case 'A': res += 0; break;  // Rock
+                    case 'B': res += 6; break;  // Paper
+                    case 'C': res += 3; break;  // Scissors
+                }
+                break;
+        }
+    });
+    return res;
+}
+
+
+function solve(input: string) {
+    let rounds = prepare(input);
+    let res = calcRounds(rounds);
+
+    console.log(res);
+}
