@@ -1,0 +1,58 @@
+const fs = require('fs');
+let fileName = 'input.txt';
+// let fileName = 'example.txt';
+fs.readFile(fileName, 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    solve(data);
+});
+function prepare(input) {
+    let stacks = [];
+    let operations = [];
+    let setup = true;
+    input
+        .split('\n')
+        .forEach(line => {
+        if (line.charAt(1) == '1') {
+            setup = false;
+        }
+        else if (line == '') {
+        }
+        else if (setup) {
+            for (let i = 0; i < line.length / 4; i++) {
+                let s = line.slice(i * 4, i * 4 + 4);
+                let crate = s.charAt(1);
+                if (!stacks[i])
+                    stacks.push([]);
+                if (crate != ' ') {
+                    stacks[i].unshift(crate);
+                }
+            }
+        }
+        else {
+            let source = line.split(' ');
+            let count = parseInt(source[1]);
+            let from = parseInt(source[3]) - 1;
+            let to = parseInt(source[5]) - 1;
+            operations.push({ count, from, to });
+        }
+    });
+    return { stacks, operations };
+}
+function calcRes({ stacks, operations }) {
+    operations.forEach(op => {
+        let stack = stacks[op.from].splice(stacks[op.from].length - op.count);
+        for (let i = 0; i < op.count; i++) {
+            stacks[op.to].push(stack[i]);
+        }
+    });
+    let res = stacks.map(stack => stack.pop()).join('');
+    return res;
+}
+function solve(input) {
+    let puzzle = prepare(input);
+    let res = calcRes(puzzle);
+    console.log(res);
+}
+//# sourceMappingURL=solution2.js.map

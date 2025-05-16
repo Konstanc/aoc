@@ -1,4 +1,4 @@
-# aoc
+# AOC TS solutions
 
 Some [Advent of Code](https://adventofcode.com/) solutions in TypeScript
 
